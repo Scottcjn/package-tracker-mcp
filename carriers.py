@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 """
 Carrier detection and canonical tracking URLs — pure logic, no network, no keys.
 

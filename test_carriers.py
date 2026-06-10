@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 """Tests for carrier detection — pure logic, no network. Run: python3 test_carriers.py"""
 
 import sys

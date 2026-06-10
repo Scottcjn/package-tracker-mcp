@@ -1,3 +1,5 @@
+[![BCOS Certified](https://img.shields.io/badge/BCOS-Certified-brightgreen?style=flat)](BCOS.md)
+
 # package-tracker-mcp
 
 A tiny [MCP](https://modelcontextprotocol.io) server that identifies a shipping

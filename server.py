@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 """
 package-tracker-mcp — an MCP server that identifies a shipping carrier from a
 tracking number and returns the carrier's official tracking URL.
