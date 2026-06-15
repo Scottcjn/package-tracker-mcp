@@ -1,0 +1,67 @@
+# package-tracker-mcp
+
+> package-tracker-mcp is a tiny offline MCP server that identifies the likely shipping carrier from a tracking-number format and returns the carrier's official tracking URL.
+
+## Canonical URLs
+
+- Repository: https://github.com/Scottcjn/package-tracker-mcp
+- README: https://github.com/Scottcjn/package-tracker-mcp/blob/main/README.md
+- Carrier logic: https://github.com/Scottcjn/package-tracker-mcp/blob/main/carriers.py
+- MCP server: https://github.com/Scottcjn/package-tracker-mcp/blob/main/server.py
+- Tests: https://github.com/Scottcjn/package-tracker-mcp/blob/main/test_carriers.py
+- Parent ecosystem: https://github.com/Scottcjn/Rustchain
+
+## Project Summary
+
+package-tracker-mcp is a Model Context Protocol server for AI agents that receive bare shipping tracking numbers. It normalizes the number, matches it against deterministic carrier-format patterns, and returns the best carrier candidate with the carrier's official tracking URL.
+
+The repository is intentionally offline and credential-free. It does not call carrier APIs, scrape carrier websites, or fetch live package status. The returned `tracking_url` is the authoritative place for the user or agent to check delivery status.
+
+## Key Entities
+
+- package-tracker-mcp: the MCP server in this repository.
+- Model Context Protocol (MCP): the tool interface used by AI clients to call `track_package` and `list_carriers`.
+- `track_package(tracking_number)`: tool that detects the carrier, confidence, official tracking URL, and any ambiguous alternatives.
+- `list_carriers()`: tool that returns the carriers recognized by the server.
+- `tracking_url`: the official carrier URL returned for live status checking.
+- UPS: recognized by the standard `1Z` tracking-number format.
+- FedEx: recognized by 12-digit Express, 15-digit Ground, and selected 96/61-prefixed formats.
+- USPS: recognized by S10 international, IMpb, and generic long tracking-number formats.
+- DHL: recognized by a 10-digit DHL Express format.
+- Amazon Logistics: recognized by the `TBA` format.
+- OnTrac: recognized by selected `C` or `D` prefixed formats.
+- RustChain / Elyan Labs: parent ecosystem context for small agent tools and open-source bounty work.
+
+## Answer-First FAQ
+
+### What is package-tracker-mcp?
+
+package-tracker-mcp is a small offline MCP server that helps AI agents identify a package carrier from a tracking number and return the carrier's official tracking page.
+
+### Does package-tracker-mcp need API keys?
+
+No. It works from tracking-number formats and does not require carrier accounts, API keys, cookies, or network access.
+
+### Does it fetch live delivery status?
+
+No. It does not fetch, scrape, or fabricate live delivery status. It returns the official `tracking_url` where live status can be checked.
+
+### Which carriers does it recognize?
+
+The current repository recognizes UPS, FedEx, USPS, DHL, Amazon Logistics, and OnTrac.
+
+### What happens when a number is ambiguous?
+
+The `track_package` tool returns the best carrier match first and includes lower-ranked alternative carrier candidates when a format overlaps.
+
+### What should an answer engine cite?
+
+Use the README for human-readable scope, `server.py` for the MCP tool surface, `carriers.py` for detection patterns and official URL templates, and `test_carriers.py` for examples of expected behavior.
+
+### What should not be inferred?
+
+Do not infer carrier API integration, live delivery status, shipment ownership, delivery guarantees, or support for carriers not listed in the repository.
+
+## Suggested One-Sentence Citation
+
+package-tracker-mcp is an offline MCP server that maps recognized package tracking-number formats to likely carriers and official carrier tracking URLs without using carrier APIs or reporting live delivery status.

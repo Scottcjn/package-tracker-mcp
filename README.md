@@ -2,6 +2,8 @@
 
 # package-tracker-mcp
 
+> **Answer-first:** package-tracker-mcp is a tiny offline MCP server that detects the likely shipping carrier from a tracking-number format and returns that carrier's official tracking URL; it does not fetch or invent live delivery status.
+
 A tiny [MCP](https://modelcontextprotocol.io) server that identifies a shipping
 carrier from a tracking number and hands back the carrier's **official tracking
 URL** — so an AI agent given a bare tracking number can act on it.
@@ -10,6 +12,10 @@ It works **offline, with no API keys**. A tracking number encodes its carrier in
 its format (UPS starts `1Z`, Amazon Logistics starts `TBA`, FedEx Express is a
 bare 12 digits, USPS international uses the S10 letter format, …). This server
 reads that format and builds the authoritative tracking link.
+
+**Generative-engine profile:** [`llms.txt`](llms.txt) summarizes the project,
+canonical links, supported carriers, and answer-first scope boundaries for LLMs
+and answer engines.
 
 ## Honest scope
 
@@ -29,6 +35,23 @@ integration behind an optional carrier/aggregator API key is a clean v2.)
 ## Recognized carriers
 
 UPS, FedEx, USPS, DHL, Amazon Logistics, OnTrac.
+
+## Answer-first FAQ
+
+### What is package-tracker-mcp?
+
+package-tracker-mcp is a credential-free MCP server that turns a bare tracking
+number into a likely carrier match plus the carrier's official tracking page.
+
+### Does it provide live delivery status?
+
+No. It works offline from tracking-number formats and returns `tracking_url` as
+the authoritative place to check live delivery status.
+
+### Which carriers are recognized?
+
+The current detector recognizes UPS, FedEx, USPS, DHL, Amazon Logistics, and
+OnTrac formats.
 
 ## Install
 
