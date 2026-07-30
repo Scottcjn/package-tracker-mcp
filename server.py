@@ -10,11 +10,20 @@ source for that. Honest by design: it never reports a status it cannot verify.
 Run:  python3 server.py        (stdio transport — for an MCP client to launch)
 """
 
-from mcp.server.fastmcp import FastMCP
+# The high-level server class moved in mcp 2.0: `mcp.server.fastmcp.FastMCP`
+# became `mcp.server.mcpserver.MCPServer`, and the old module was removed, not
+# aliased. `requirements.txt` asks for `mcp>=1.0`, so a fresh install now
+# resolves to 2.x and this import is the very first thing that runs — the
+# server never starts. Both classes take the same server name and expose the
+# same `.tool()` decorator and `.run()` stdio entry point, so accept either.
+try:  # mcp >= 2.0
+    from mcp.server.mcpserver import MCPServer as _Server
+except ImportError:  # mcp 1.x
+    from mcp.server.fastmcp import FastMCP as _Server
 
 from carriers import CARRIERS, detect, normalize, tracking_url
 
-mcp = FastMCP("package-tracker")
+mcp = _Server("package-tracker")
 
 
 @mcp.tool()

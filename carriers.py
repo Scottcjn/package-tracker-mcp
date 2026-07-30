@@ -3,10 +3,11 @@
 Carrier detection and canonical tracking URLs — pure logic, no network, no keys.
 
 A shipping tracking number encodes its carrier in its format: UPS numbers start
-"1Z", Amazon Logistics start "TBA", USPS international uses the S10 letter
-format, FedEx Express is a bare 12 digits, and so on. This module identifies the
-carrier from that format and builds the carrier's official tracking URL with the
-number pre-filled — the authoritative place to see live status.
+"1Z", Amazon Logistics start "TBA", USPS international mail uses the S10 letter
+format ending in "US", FedEx Express is a bare 12 digits, and so on. This module
+identifies the carrier from that format and builds the carrier's official
+tracking URL with the number pre-filled — the authoritative place to see live
+status.
 
 No API keys, no scraping, no network calls. Deterministic and offline.
 """
@@ -29,13 +30,19 @@ _PATTERNS = [
     (r"1Z[0-9A-Z]{16}",                    "ups",    "high"),    # UPS standard
     (r"TBA[0-9]{12}",                      "amazon", "high"),    # Amazon Logistics
     (r"[CD][0-9]{14}",                     "ontrac", "high"),    # OnTrac
-    (r"[A-Z]{2}[0-9]{9}[A-Z]{2}",          "usps",   "high"),    # USPS S10 international
+    (r"[A-Z]{2}[0-9]{9}US",                "usps",   "high"),    # S10, posted in the US
     (r"(?:94|93|92|95|91|90)[0-9]{18,20}", "usps",   "high"),    # USPS IMpb 20-22 digit
     (r"[0-9]{12}",                         "fedex",  "high"),    # FedEx Express
     (r"[0-9]{15}",                         "fedex",  "medium"),  # FedEx Ground
     (r"(?:96|61)[0-9]{18}",                "fedex",  "medium"),  # FedEx 96-prefixed
     (r"[0-9]{10}",                         "dhl",    "medium"),  # DHL Express
     (r"[0-9]{20,22}",                      "usps",   "low"),     # generic long IMpb
+    # S10 posted anywhere else. The last two letters are the ISO code of the
+    # origin post (UPU S10), so RB123456789CN is China Post and RR123456789RU
+    # is Russian Post — not USPS. USPS is only in the picture as the delivering
+    # operator if the item happens to be inbound to the US, which the number
+    # cannot tell us. Worth offering, not worth claiming as "high".
+    (r"[A-Z]{2}[0-9]{9}[A-Z]{2}",          "usps",   "low"),     # S10, foreign origin
 ]
 _RANK = {"high": 0, "medium": 1, "low": 2}
 
