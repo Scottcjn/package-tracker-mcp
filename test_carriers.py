@@ -28,7 +28,18 @@ def test_amazon_tba():
 
 def test_usps_international():
     c = detect("EA123456789US")
-    assert c and c[0]["carrier"] == "usps"
+    assert c and c[0]["carrier"] == "usps" and c[0]["confidence"] == "high"
+
+
+def test_s10_foreign_origin_is_not_high_confidence():
+    # The last two letters of an S10 number are the ISO code of the origin
+    # post, so these were posted by China Post and Russian Post. USPS is at
+    # best the delivering operator, and only if the item is inbound to the US.
+    for number in ("RB123456789CN", "RR123456789RU", "LZ123456789DE"):
+        c = detect(number)
+        assert c, f"{number} should still be offered as a candidate"
+        assert c[0]["carrier"] == "usps"
+        assert c[0]["confidence"] != "high", f"{number} claimed as high-confidence USPS"
 
 
 def test_usps_impb():

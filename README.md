@@ -89,7 +89,8 @@ track_package("123456789012")
 ## Test
 
 ```bash
-python3 test_carriers.py
+python3 test_carriers.py    # detection logic
+python3 test_server.py      # MCP entry point, on both mcp 1.x and 2.x
 ```
 
 ## License
